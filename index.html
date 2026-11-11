@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Career Habits and Goal Setting | GTP1202 Career Management</title>
+<meta name="description" content="Class activities for GTP1202 Career Management, Topic 1.3: the WOOP exercise and the Checklist for Career Exploration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mist:#EDF2EF; --paper:#FFFFFF; --pine:#123F3A; --pine-2:#2F6B62;
+  --sun:#F4B63F; --sun-soft:#FDF1D3; --ink:#1B2624; --muted:#586763;
+  --line:#CBD8D2; --coral:#C8492F; --coral-soft:#FBE4DE; --leaf-soft:#DCEDE6;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--mist);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+h1,h2,h3,p{margin:0}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+/* masthead */
+.mast{background:var(--pine);color:#fff;padding:28px 0 0}
+.course{font-size:.9rem;color:#B9D3CC;font-weight:500}
+.mast h1{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,6.4vw,3rem);line-height:1.05;letter-spacing:-.02em;margin:6px 0 20px}
+.who{display:grid;grid-template-columns:1fr 150px;gap:12px;margin-bottom:22px}
+.who label{display:block;font-size:.85rem;color:#B9D3CC;margin-bottom:4px}
+.who input{width:100%;padding:11px 12px;border:1.5px solid #3F7269;border-radius:8px;background:#0C302C;color:#fff}
+.who input::placeholder{color:#7FA59C}
+.tabs{display:flex;gap:4px}
+.tab{flex:1;border:0;cursor:pointer;padding:14px 10px;border-radius:12px 12px 0 0;background:#1C524B;color:#CFE2DC;font-weight:600;font-size:1rem}
+.tab[aria-selected="true"]{background:var(--mist);color:var(--pine)}
+
+main.wrap{padding:28px 20px 120px}
+.view[hidden]{display:none}
+.lede{font-size:1.05rem;max-width:62ch}
+.lede + .lede{margin-top:12px}
+h2{font-family:var(--display);font-weight:700;font-size:1.7rem;line-height:1.15;letter-spacing:-.01em;color:var(--pine)}
+
+.btn{border:0;cursor:pointer;border-radius:999px;padding:13px 22px;font-weight:600;background:var(--pine);color:#fff;min-height:48px}
+.btn:hover{background:#0B2F2B}
+.btn.ghost{background:transparent;color:var(--pine);box-shadow:inset 0 0 0 1.5px var(--pine)}
+.btn.ghost:hover{background:var(--leaf-soft)}
+.btn.sun{background:var(--sun);color:#3A2A00}
+.btn.sun:hover{background:#EBA922}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.linkbtn{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:.92rem}
+
+/* WOOP letter rail: the signature element */
+.rail{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:4px 0 22px}
+.letter{border:0;background:none;cursor:pointer;padding:0 0 10px;text-align:left;border-bottom:5px solid var(--line)}
+.letter b{display:block;font-family:var(--display);font-weight:800;font-size:clamp(3.4rem,17vw,6.5rem);line-height:.9;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:2px var(--pine-2)}
+.letter span{display:block;font-size:.88rem;font-weight:600;color:var(--muted);margin-top:6px}
+.letter.done b{color:var(--pine-2);-webkit-text-stroke:0}
+.letter.current{border-bottom-color:var(--sun)}
+.letter.current b{color:var(--pine);-webkit-text-stroke:0}
+.letter.current span{color:var(--pine)}
+
+.sheet{background:var(--paper);border-radius:16px;padding:26px 22px;border:1px solid var(--line)}
+.sheet h2{margin-bottom:10px}
+.ask{font-size:1.08rem}
+.checks{margin:16px 0 0;padding:14px 16px 14px 34px;background:var(--mist);border-radius:10px;color:#33433F;font-size:.97rem}
+.checks li + li{margin-top:5px}
+.field{margin-top:22px}
+.field label{display:block;font-weight:600;margin-bottom:8px}
+textarea,.line{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:13px 14px;background:#FBFDFC;resize:vertical}
+textarea:focus,.line:focus{border-color:var(--pine-2);outline:none;box-shadow:0 0 0 3px var(--leaf-soft)}
+.ifthen{display:grid;gap:12px}
+.ifthen .lead{font-family:var(--display);font-weight:700;font-size:1.25rem;color:var(--pine);margin-bottom:4px;display:block}
+.stepnav{display:flex;justify-content:space-between;gap:10px;margin-top:24px}
+.hint{color:var(--coral);font-size:.93rem;margin-top:10px;min-height:1.4em}
+
+/* summary */
+.mine{background:var(--pine);color:#fff;border-radius:16px;padding:26px 22px}
+.mine .by{color:#B9D3CC;font-size:.95rem}
+.mine h2{color:#fff;margin-bottom:2px}
+.mine dl{margin:18px 0 0}
+.mine .item{display:grid;grid-template-columns:54px 1fr;gap:6px 14px;padding:16px 0;border-top:1px solid #2F6B62}
+.mine dt{font-family:var(--display);font-weight:800;font-size:2.6rem;line-height:.9;color:var(--sun)}
+.mine dd{margin:0}
+.mine dd small{display:block;color:#B9D3CC;font-size:.85rem;font-weight:600}
+.mine dd p{font-size:1.15rem;line-height:1.4}
+.mine dd p.empty{color:#8FB3AA;font-style:italic}
+.after{margin-top:18px}
+
+/* checklist */
+.list{list-style:none;margin:20px 0 0;padding:0;background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.list li + li{border-top:1px solid #E2EAE6}
+.list label{display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:start;padding:15px 18px;cursor:pointer}
+.list label:hover{background:#F6F9F7}
+.list input{appearance:none;-webkit-appearance:none;width:28px;height:28px;margin:0;border:2px solid var(--pine-2);border-radius:7px;background:#fff;cursor:pointer;display:grid;place-content:center}
+.list input:checked{background:var(--pine)}
+.list input:checked::after{content:"";width:8px;height:14px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.list input:checked + span{color:var(--pine);font-weight:500}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--pine);color:#fff;padding:12px 0;z-index:5}
+.bar .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.count{font-family:var(--display);font-weight:800;font-size:1.7rem;line-height:1}
+.count small{font-family:var(--body);font-weight:500;font-size:.9rem;color:#B9D3CC;margin-left:6px}
+
+.result{margin-top:24px;border-radius:16px;padding:26px 22px;background:var(--paper);border:1px solid var(--line)}
+.score{display:flex;align-items:baseline;gap:10px;font-family:var(--display);font-weight:800;color:var(--pine)}
+.score b{font-size:clamp(4.5rem,22vw,7rem);line-height:.85;letter-spacing:-.04em}
+.score span{font-size:1.4rem;color:var(--muted);font-weight:700}
+.verdict{font-family:var(--display);font-weight:700;font-size:1.5rem;margin:14px 0 18px;padding:12px 16px;border-radius:10px;display:inline-block}
+.verdict.hi{background:var(--leaf-soft);color:var(--pine)}
+.verdict.mid{background:var(--sun-soft);color:#6B4A00}
+.verdict.lo{background:var(--coral-soft);color:#8A2A16}
+table{width:100%;border-collapse:collapse;font-size:.97rem}
+th{background:var(--ink);color:#fff;text-align:left;padding:9px 12px;font-weight:600}
+td{padding:9px 12px;border-bottom:1px solid var(--line)}
+tr.on td{background:var(--sun-soft);font-weight:600}
+td:first-child,th:first-child{width:90px}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:.95rem;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+.toast.show{opacity:1}
+.saved{color:var(--muted);font-size:.9rem;margin-top:28px}
+
+@media (max-width:480px){
+  .who{grid-template-columns:1fr 110px}
+  .sheet,.mine,.result{padding:22px 18px}
+  .stepnav .btn{padding:13px 18px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media print{
+  body{background:#fff;font-size:12pt}
+  .mast{background:#fff;color:#000;padding:0}
+  .mast h1{font-size:20pt;margin:2px 0 8px}
+  .course{color:#333}
+  .tabs,.bar,.toast,.btn,.linkbtn,.rail,.saved,.noprint{display:none!important}
+  .who label{color:#333}.who input{background:#fff;color:#000;border-color:#999}
+  main{padding:10px 0}
+  .mine{background:#fff;color:#000;border:1.5px solid #000}
+  .mine h2,.mine dt{color:#000}.mine .by,.mine dd small{color:#333}
+  .mine .item{border-top-color:#999}
+  .list label{padding:6px 10px}
+  .list,.result,.sheet{border-color:#999}
+}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="course">GTP1202 Career Management, Topic 1.3</p>
+    <h1>Career Habits and Goal Setting</h1>
+    <div class="who">
+      <div><label for="name">Your name</label><input id="name" autocomplete="name" placeholder="e.g. Tan Wei Ling"></div>
+      <div><label for="cls">Class</label><input id="cls" autocomplete="off" placeholder="e.g. PE01"></div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Activities">
+      <button class="tab" role="tab" id="tab-woop" aria-controls="view-woop" aria-selected="true">WOOP</button>
+      <button class="tab" role="tab" id="tab-check" aria-controls="view-check" aria-selected="false">Career checklist</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ WOOP ============ -->
+  <section class="view" id="view-woop" role="tabpanel" aria-labelledby="tab-woop">
+
+    <div id="woop-intro">
+      <h2>Before you start</h2>
+      <p class="lede" style="margin-top:12px">WOOP is different from other exercises: it involves thoughts and images rather than rational or effortful thinking. It involves going slow, creating time and space for thinking and imagining.</p>
+      <p class="lede">It is critical that no interruptions occur during the exercise. Start when you feel calm and comfortable. This is your time now. Everything else has to wait. Clear your mind and create space to imagine.</p>
+      <p class="lede">After going through today's lesson, think about your career aspirations and the steps you would like to take to achieve them.</p>
+      <div class="row" style="margin-top:22px"><button class="btn sun" id="woop-start">Start WOOP</button></div>
+    </div>
+
+    <div id="woop-steps" hidden>
+      <div class="rail" id="rail" role="group" aria-label="WOOP steps"></div>
+      <div class="sheet">
+        <h2 id="step-title"></h2>
+        <p class="ask" id="step-ask"></p>
+        <ul class="checks" id="step-checks"></ul>
+        <div class="field" id="step-field"></div>
+        <p class="hint" id="step-hint" role="status"></p>
+        <div class="stepnav">
+          <button class="btn ghost" id="step-back">Back</button>
+          <button class="btn" id="step-next">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="woop-summary" hidden>
+      <div class="mine">
+        <h2>My WOOP</h2>
+        <p class="by" id="woop-by"></p>
+        <dl id="woop-dl"></dl>
+      </div>
+      <div class="row after noprint">
+        <button class="btn" id="woop-copy">Copy my WOOP</button>
+        <button class="btn ghost" id="woop-print">Print or save as PDF</button>
+        <button class="btn ghost" id="woop-edit">Edit my answers</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CHECKLIST ============ -->
+  <section class="view" id="view-check" role="tabpanel" aria-labelledby="tab-check" hidden>
+    <h2>Checklist for career exploration</h2>
+    <p class="lede" style="margin-top:10px">Check the things that you have completed in your career-planning process. Your checks are totalled for you.</p>
+    <ul class="list" id="list"></ul>
+
+    <div class="sheet" style="margin-top:20px">
+      <div class="field" style="margin-top:0">
+        <label for="todo">What things do you still need to accomplish? When will you do this?</label>
+        <textarea id="todo" rows="4" placeholder="e.g. Speak to an ECG counsellor before the end of this term."></textarea>
+      </div>
+    </div>
+
+    <div class="result" id="result" hidden>
+      <p class="by" id="check-by" style="color:var(--muted);font-size:.95rem;margin-bottom:10px"></p>
+      <div class="score" aria-live="polite"><b id="score-n">0</b><span>out of 20</span></div>
+      <p class="verdict" id="verdict"></p>
+      <table>
+        <thead><tr><th>Score</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr id="band-hi"><td>11 – 20</td><td>Well done! You are on the right track</td></tr>
+          <tr id="band-mid"><td>6 – 10</td><td>You can do better</td></tr>
+          <tr id="band-lo"><td>0 – 5</td><td>Please work harder ☹</td></tr>
+        </tbody>
+      </table>
+      <div class="row after noprint">
+        <button class="btn" id="check-copy">Copy my result</button>
+        <button class="btn ghost" id="check-print">Print or save as PDF</button>
+      </div>
+    </div>
+  </section>
+
+  <p class="saved noprint">Your answers are saved on this device only, so you can close the page and come back. <button class="linkbtn" id="clear">Clear my answers</button></p>
+</main>
+
+<div class="bar" id="bar" hidden>
+  <div class="wrap">
+    <div class="count"><span id="count-n">0</span><small>of 20 checked</small></div>
+    <button class="btn sun" id="show-score">Show my score</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+"use strict";
+
+var STEPS = [
+  {key:"wish", letter:"W", name:"Wish",
+   ask:"What is a specific career wish that you would like to fulfil within the next month? Your wish should be challenging but feasible.",
+   checks:["Is this wish dear to you?","Do you think you can achieve it?","Is it challenging for you?"],
+   label:"Note your wish in 1 sentence"},
+  {key:"outcome", letter:"O", name:"Outcome",
+   ask:"What will be the best result or benefit from accomplishing your wish? How would it make you feel? Close your eyes and envision this outcome.",
+   checks:["Is it a truly fulfilling outcome?","Did you take enough time to imagine this best outcome? If not, close your eyes and imagine the best outcome. Imagine it fully."],
+   label:"Note your desired outcome in 1 sentence"},
+  {key:"obstacle", letter:"O", name:"Obstacle",
+   ask:"What is the main obstacle inside you that is holding you back from fulfilling your wish? Close your eyes and envision this obstacle.",
+   checks:["Is your obstacle an inner obstacle?","Did you take enough time to imagine your main obstacle? If not, close your eyes and imagine your main obstacle. Imagine it fully."],
+   label:"Note your main inner obstacle in 1 sentence"},
+  {key:"plan", letter:"P", name:"Plan",
+   ask:"What is an effective action to overcome your obstacle? Make an if-then plan.",
+   checks:["Did you find an effective action to overcome your obstacle?","Check that the plan has this structure: “If [obstacle], then I will [action].” If not, create the if-then plan again."],
+   label:""}
+];
+
+var ITEMS = [
+  "Taken self-assessment of work skills, career interests and work values (e.g. MySkillsFuture)",
+  "Participate in on-campus organizations (CCAs) to develop technical and/or soft skills",
+  "Used the internet to research on industries and compare occupations",
+  "Found out about education requirements, job prospects of occupations of interest",
+  "Obtained certifications in vocational skills (e.g. Private Pilot License)",
+  "Joined student interest groups or on mailing list of organizations in field(s) of interest",
+  "Read books/articles about careers or employment trends",
+  "Spoken to someone in an occupation of interest to you",
+  "Attended a Job Fair (e.g. TP Opportunity Fair)",
+  "Attended talks and/or workshops by industry speakers",
+  "Attended on-campus recruitment talks",
+  "Started building portfolio and/or resume",
+  "Talked about post diploma plans with your family or mentor",
+  "Spoken to an ECG counsellor to assist in identification and clarification of career options",
+  "Went on a job shadowing experience or internship",
+  "Worked on part-time jobs in field(s) of interest",
+  "Participated in study trips organized by your diploma",
+  "Participated in volunteer events to build resume",
+  "Spoken to Alumni on his/her education and work experience upon graduation",
+  "Began networking via friends and family to make contacts in fields of interest"
+];
+
+var KEY = "cama13-career-habits-v1";
+var state = {name:"", cls:"", tab:"woop", stage:"intro", step:0,
+  woop:{wish:"", outcome:"", obstacle:"", ifPart:"", thenPart:""},
+  checks:ITEMS.map(function(){return false;}), todo:"", shown:false};
+
+function load(){
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(!raw) return;
+    var s = JSON.parse(raw);
+    if(s && typeof s === "object"){
+      ["name","cls","tab","stage","step","todo","shown"].forEach(function(k){ if(k in s) state[k] = s[k]; });
+      if(s.woop) Object.keys(state.woop).forEach(function(k){ if(typeof s.woop[k] === "string") state.woop[k] = s.woop[k]; });
+      if(Array.isArray(s.checks) && s.checks.length === ITEMS.length) state.checks = s.checks.map(Boolean);
+    }
+  }catch(e){}
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function $(id){ return document.getElementById(id); }
+function el(tag, attrs, text){
+  var n = document.createElement(tag);
+  if(attrs) Object.keys(attrs).forEach(function(k){ n.setAttribute(k, attrs[k]); });
+  if(text != null) n.textContent = text;
+  return n;
+}
+function today(){
+  return new Date().toLocaleDateString("en-SG",{day:"numeric",month:"short",year:"numeric"});
+}
+function byline(){
+  var parts = [];
+  if(state.name.trim()) parts.push(state.name.trim());
+  if(state.cls.trim()) parts.push("Class " + state.cls.trim());
+  parts.push(today());
+  return parts.join(", ");
+}
+var toastTimer;
+function toast(msg){
+  var t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 2200);
+}
+function copy(text, okMsg){
+  function fallback(){
+    var ta = el("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    var ok = false; try{ ok = document.execCommand("copy"); }catch(e){}
+    document.body.removeChild(ta);
+    toast(ok ? okMsg : "Could not copy. Select the text and copy it yourself.");
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ toast(okMsg); }, fallback);
+  } else fallback();
+}
+
+/* ---------- tabs ---------- */
+function showTab(tab){
+  state.tab = tab;
+  ["woop","check"].forEach(function(t){
+    $("tab-"+t).setAttribute("aria-selected", String(t === tab));
+    $("view-"+t).hidden = t !== tab;
+  });
+  $("bar").hidden = tab !== "check";
+  save();
+}
+
+/* ---------- WOOP ---------- */
+function stepDone(i){
+  var w = state.woop;
+  if(i === 3) return w.ifPart.trim() !== "" && w.thenPart.trim() !== "";
+  return w[STEPS[i].key].trim() !== "";
+}
+function renderRail(){
+  var rail = $("rail"); rail.textContent = "";
+  STEPS.forEach(function(s, i){
+    var b = el("button", {"class":"letter" + (stepDone(i) ? " done":"") + (i === state.step ? " current":""), "type":"button", "aria-label": s.name + (stepDone(i) ? ", filled in":"")});
+    if(i === state.step) b.setAttribute("aria-current","step");
+    b.appendChild(el("b", null, s.letter));
+    b.appendChild(el("span", null, s.name));
+    b.addEventListener("click", function(){ state.step = i; renderStep(true); });
+    rail.appendChild(b);
+  });
+}
+function renderStep(focus){
+  var s = STEPS[state.step], w = state.woop;
+  renderRail();
+  $("step-title").textContent = s.name;
+  $("step-ask").textContent = s.ask;
+  var ul = $("step-checks"); ul.textContent = "";
+  s.checks.forEach(function(c){ ul.appendChild(el("li", null, c)); });
+  var f = $("step-field"); f.textContent = "";
+  $("step-hint").textContent = "";
+  var first;
+  if(s.key === "plan"){
+    var box = el("div", {"class":"ifthen"});
+    [["ifPart","If","my obstacle comes up…","plan-if"],["thenPart","Then I will","take this action…","plan-then"]].forEach(function(p){
+      var d = el("div");
+      d.appendChild(el("label", {"for":p[3], "class":"lead"}, p[1]));
+      var ta = el("textarea", {"id":p[3], "rows":"2", "placeholder":p[2]});
+      ta.value = w[p[0]];
+      ta.addEventListener("input", function(){ w[p[0]] = ta.value; save(); renderRail(); });
+      d.appendChild(ta); box.appendChild(d);
+      if(!first) first = ta;
+    });
+    f.appendChild(box);
+  } else {
+    f.appendChild(el("label", {"for":"step-input"}, s.label));
+    var ta = el("textarea", {"id":"step-input", "rows":"3"});
+    ta.value = w[s.key];
+    ta.addEventListener("input", function(){ w[s.key] = ta.value; save(); renderRail(); });
+    f.appendChild(ta); first = ta;
+  }
+  $("step-back").textContent = state.step === 0 ? "Intro" : "Back";
+  $("step-next").textContent = state.step === 3 ? "See my WOOP" : "Next: " + STEPS[state.step+1].name;
+  save();
+  if(focus && first){ first.focus({preventScroll:true}); window.scrollTo({top:$("woop-steps").offsetTop + $("view-woop").offsetTop - 0, behavior:"smooth"}); }
+}
+function renderSummary(){
+  var w = state.woop, dl = $("woop-dl"); dl.textContent = "";
+  $("woop-by").textContent = byline();
+  var rows = [["W","Wish",w.wish],["O","Outcome",w.outcome],["O","Obstacle",w.obstacle],["P","Plan",planText()]];
+  rows.forEach(function(r){
+    var item = el("div", {"class":"item"});
+    item.appendChild(el("dt", null, r[0]));
+    var dd = el("dd"); dd.appendChild(el("small", null, r[1]));
+    var p = el("p", null, r[2].trim() || "Not filled in yet");
+    if(!r[2].trim()) p.className = "empty";
+    dd.appendChild(p); item.appendChild(dd); dl.appendChild(item);
+  });
+}
+function planText(){
+  var w = state.woop, a = w.ifPart.trim(), b = w.thenPart.trim();
+  if(!a && !b) return "";
+  return "If " + (a || "…").replace(/^if\s+/i,"").replace(/[,.\s]+$/,"") + ", then I will " + (b || "…").replace(/^(then\s+)?i\s+will\s+/i,"");
+}
+function showStage(stage, focus){
+  state.stage = stage;
+  $("woop-intro").hidden = stage !== "intro";
+  $("woop-steps").hidden = stage !== "steps";
+  $("woop-summary").hidden = stage !== "summary";
+  if(stage === "steps") renderStep(focus);
+  if(stage === "summary") renderSummary();
+  save();
+}
+function woopText(){
+  var w = state.woop;
+  return ["My WOOP (" + byline() + ")",
+    "Wish: " + (w.wish.trim() || "-"),
+    "Outcome: " + (w.outcome.trim() || "-"),
+    "Obstacle: " + (w.obstacle.trim() || "-"),
+    "Plan: " + (planText() || "-")].join("\n");
+}
+
+/* ---------- checklist ---------- */
+function total(){ return state.checks.filter(Boolean).length; }
+function band(n){ return n >= 11 ? "hi" : n >= 6 ? "mid" : "lo"; }
+var VERDICT = {hi:"Well done! You are on the right track", mid:"You can do better", lo:"Please work harder ☹"};
+function renderList(){
+  var list = $("list"); list.textContent = "";
+  ITEMS.forEach(function(text, i){
+    var li = el("li"), lab = el("label"), cb = el("input", {"type":"checkbox"});
+    cb.checked = state.checks[i];
+    cb.addEventListener("change", function(){ state.checks[i] = cb.checked; save(); renderScore(); });
+    lab.appendChild(cb); lab.appendChild(el("span", null, text)); li.appendChild(lab); list.appendChild(li);
+  });
+}
+function renderScore(){
+  var n = total(), b = band(n);
+  $("count-n").textContent = n;
+  $("score-n").textContent = n;
+  $("result").hidden = !state.shown;
+  $("show-score").textContent = state.shown ? "Go to my score" : "Show my score";
+  var v = $("verdict"); v.textContent = VERDICT[b]; v.className = "verdict " + b;
+  ["hi","mid","lo"].forEach(function(k){ $("band-"+k).className = k === b ? "on" : ""; });
+  $("check-by").textContent = "Completed by " + byline();
+}
+function checkText(){
+  var n = total(), lines = ["Checklist for Career Exploration (" + byline() + ")",
+    "My current score: " + n + " out of 20. " + VERDICT[band(n)].replace(" ☹",""), "", "Completed:"];
+  ITEMS.forEach(function(t, i){ if(state.checks[i]) lines.push("[x] " + t); });
+  if(n === 0) lines.push("(none yet)");
+  lines.push("", "Still to accomplish, and when:", state.todo.trim() || "-");
+  return lines.join("\n");
+}
+
+/* ---------- wire up ---------- */
+load();
+$("name").value = state.name; $("cls").value = state.cls; $("todo").value = state.todo;
+$("name").addEventListener("input", function(e){ state.name = e.target.value; save(); refreshBy(); });
+$("cls").addEventListener("input", function(e){ state.cls = e.target.value; save(); refreshBy(); });
+$("todo").addEventListener("input", function(e){ state.todo = e.target.value; save(); });
+function refreshBy(){ if(state.stage === "summary") $("woop-by").textContent = byline(); $("check-by").textContent = "Completed by " + byline(); }
+
+$("tab-woop").addEventListener("click", function(){ showTab("woop"); });
+$("tab-check").addEventListener("click", function(){ showTab("check"); });
+
+$("woop-start").addEventListener("click", function(){ showStage("steps", true); });
+$("step-back").addEventListener("click", function(){
+  if(state.step === 0) showStage("intro"); else { state.step--; renderStep(true); }
+});
+$("step-next").addEventListener("click", function(){
+  if(!stepDone(state.step)){
+    $("step-hint").textContent = state.step === 3 ? "Fill in both parts of your if-then plan before you continue." : "Write one sentence before you continue.";
+    return;
+  }
+  if(state.step === 3){ showStage("summary"); window.scrollTo({top:0, behavior:"smooth"}); }
+  else { state.step++; renderStep(true); }
+});
+$("woop-edit").addEventListener("click", function(){ state.step = 0; showStage("steps", true); });
+$("woop-copy").addEventListener("click", function(){ copy(woopText(), "Copied your WOOP"); });
+$("woop-print").addEventListener("click", function(){ window.print(); });
+
+$("show-score").addEventListener("click", function(){
+  state.shown = true; save(); renderScore();
+  $("result").scrollIntoView({behavior:"smooth", block:"start"});
+});
+$("check-copy").addEventListener("click", function(){ copy(checkText(), "Copied your result"); });
+$("check-print").addEventListener("click", function(){ window.print(); });
+
+$("clear").addEventListener("click", function(){
+  if(!window.confirm("Clear everything you have filled in on this device? This cannot be undone.")) return;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  window.location.reload();
+});
+
+renderList(); renderScore();
+if(state.step < 0 || state.step > 3) state.step = 0;
+showStage(["intro","steps","summary"].indexOf(state.stage) >= 0 ? state.stage : "intro");
+showTab(state.tab === "check" ? "check" : "woop");
+})();
+</script>
+</body>
+</html>
