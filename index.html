@@ -115,12 +115,22 @@ th{background:var(--ink);color:#fff;text-align:left;padding:9px 12px;font-weight
 td{padding:9px 12px;border-bottom:1px solid var(--line)}
 tr.on td{background:var(--sun-soft);font-weight:600}
 td:first-child,th:first-child{width:90px}
+.share{margin-top:18px;padding:18px 20px;border-radius:14px;background:var(--sun-soft);border:1px solid #EBD9A6}
+.share p{margin-bottom:12px}
+.steps{margin:14px 0 0;padding-left:1.4em;max-width:60ch}
+.steps li{padding-left:4px}
+.steps li + li{margin-top:7px}
+.copied{color:var(--pine-2);font-weight:600;min-height:1.5em;margin-top:10px}
+.board{margin-top:8px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--paper)}
+.board iframe{display:block;width:100%;height:min(78vh,720px);min-height:520px;border:0}
+a{color:var(--pine-2);font-weight:600}
 .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:.95rem;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
 .toast.show{opacity:1}
 .saved{color:var(--muted);font-size:.9rem;margin-top:28px}
 
 @media (max-width:480px){
   .who{grid-template-columns:1fr 110px}
+  .tab{font-size:.93rem;padding:13px 6px}
   .sheet,.mine,.result{padding:22px 18px}
   .stepnav .btn{padding:13px 18px}
 }
@@ -130,7 +140,7 @@ td:first-child,th:first-child{width:90px}
   .mast{background:#fff;color:#000;padding:0}
   .mast h1{font-size:20pt;margin:2px 0 8px}
   .course{color:#333}
-  .tabs,.bar,.toast,.btn,.linkbtn,.rail,.saved,.noprint{display:none!important}
+  .tabs,.bar,.toast,.btn,.linkbtn,.rail,.saved,.noprint,#view-padlet{display:none!important}
   .who label{color:#333}.who input{background:#fff;color:#000;border-color:#999}
   main{padding:10px 0}
   .mine{background:#fff;color:#000;border:1.5px solid #000}
@@ -154,6 +164,7 @@ td:first-child,th:first-child{width:90px}
     <div class="tabs" role="tablist" aria-label="Activities">
       <button class="tab" role="tab" id="tab-woop" aria-controls="view-woop" aria-selected="true">WOOP</button>
       <button class="tab" role="tab" id="tab-check" aria-controls="view-check" aria-selected="false">Career checklist</button>
+      <button class="tab" role="tab" id="tab-padlet" aria-controls="view-padlet" aria-selected="false">Padlet</button>
     </div>
   </div>
 </header>
@@ -197,6 +208,10 @@ td:first-child,th:first-child{width:90px}
         <button class="btn ghost" id="woop-print">Print or save as PDF</button>
         <button class="btn ghost" id="woop-edit">Edit my answers</button>
       </div>
+      <div class="share noprint">
+        <p><strong>Share it with the class.</strong> Copy your WOOP, then paste it as a post on the class Padlet.</p>
+        <button class="btn sun" id="woop-share">Copy and go to Padlet</button>
+      </div>
     </div>
   </section>
 
@@ -229,7 +244,32 @@ td:first-child,th:first-child{width:90px}
         <button class="btn" id="check-copy">Copy my result</button>
         <button class="btn ghost" id="check-print">Print or save as PDF</button>
       </div>
+      <div class="share noprint">
+        <p><strong>Share it with the class.</strong> Copy your result, then paste it as a post on the class Padlet.</p>
+        <button class="btn sun" id="check-share">Copy and go to Padlet</button>
+      </div>
     </div>
+  </section>
+
+  <!-- ============ PADLET ============ -->
+  <section class="view" id="view-padlet" role="tabpanel" aria-labelledby="tab-padlet" hidden>
+    <h2>Share on the class Padlet</h2>
+    <ol class="steps">
+      <li>Copy your answers with one of the buttons below.</li>
+      <li>On the Padlet board, tap the <strong>+</strong> button to start a new post.</li>
+      <li>Type your name and class as the subject.</li>
+      <li>Tap in the body of the post and paste (press and hold, then choose Paste, or Ctrl+V on a laptop).</li>
+      <li>Tap <strong>Publish</strong>.</li>
+    </ol>
+    <div class="row" style="margin-top:18px">
+      <button class="btn" id="padlet-copy-woop">Copy my WOOP</button>
+      <button class="btn" id="padlet-copy-check">Copy my checklist result</button>
+    </div>
+    <p class="copied" id="padlet-status" role="status"></p>
+    <div class="board">
+      <iframe id="padlet-frame" title="Class Padlet: CAMA Topic 1.3" allow="camera;microphone;geolocation;display-capture;clipboard-write" loading="lazy"></iframe>
+    </div>
+    <p style="margin-top:14px">Board not loading, or too small to use on your phone? <a id="padlet-link" href="https://padlet.com/temasek_polytechnic/cama-topic-1-3-s025cv9q4kyzxfhi5tkj" target="_blank" rel="noopener">Open the Padlet in a new tab</a>.</p>
   </section>
 
   <p class="saved noprint">Your answers are saved on this device only, so you can close the page and come back. <button class="linkbtn" id="clear">Clear my answers</button></p>
@@ -290,6 +330,7 @@ var ITEMS = [
 ];
 
 var KEY = "cama13-career-habits-v1";
+var PADLET_EMBED = "https://padlet.com/embed/s025cv9q4kyzxfhi5tkj";
 var state = {name:"", cls:"", tab:"woop", stage:"intro", step:0,
   woop:{wish:"", outcome:"", obstacle:"", ifPart:"", thenPart:""},
   checks:ITEMS.map(function(){return false;}), todo:"", shown:false};
@@ -345,11 +386,15 @@ function copy(text, okMsg){
 /* ---------- tabs ---------- */
 function showTab(tab){
   state.tab = tab;
-  ["woop","check"].forEach(function(t){
+  ["woop","check","padlet"].forEach(function(t){
     $("tab-"+t).setAttribute("aria-selected", String(t === tab));
     $("view-"+t).hidden = t !== tab;
   });
   $("bar").hidden = tab !== "check";
+  if(tab === "padlet"){
+    var fr = $("padlet-frame");
+    if(!fr.getAttribute("src")) fr.setAttribute("src", PADLET_EMBED);
+  }
   save();
 }
 
@@ -482,6 +527,23 @@ function refreshBy(){ if(state.stage === "summary") $("woop-by").textContent = b
 
 $("tab-woop").addEventListener("click", function(){ showTab("woop"); });
 $("tab-check").addEventListener("click", function(){ showTab("check"); });
+$("tab-padlet").addEventListener("click", function(){ showTab("padlet"); });
+function shareTo(text, what){
+  copy(text, "Copied your " + what);
+  showTab("padlet");
+  $("padlet-status").textContent = "Your " + what + " is copied. Now paste it into a new post on the board.";
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+$("woop-share").addEventListener("click", function(){ shareTo(woopText(), "WOOP"); });
+$("check-share").addEventListener("click", function(){ shareTo(checkText(), "checklist result"); });
+$("padlet-copy-woop").addEventListener("click", function(){
+  copy(woopText(), "Copied your WOOP");
+  $("padlet-status").textContent = "Your WOOP is copied. Now paste it into a new post on the board.";
+});
+$("padlet-copy-check").addEventListener("click", function(){
+  copy(checkText(), "Copied your checklist result");
+  $("padlet-status").textContent = "Your checklist result is copied. Now paste it into a new post on the board.";
+});
 
 $("woop-start").addEventListener("click", function(){ showStage("steps", true); });
 $("step-back").addEventListener("click", function(){
@@ -515,7 +577,7 @@ $("clear").addEventListener("click", function(){
 renderList(); renderScore();
 if(state.step < 0 || state.step > 3) state.step = 0;
 showStage(["intro","steps","summary"].indexOf(state.stage) >= 0 ? state.stage : "intro");
-showTab(state.tab === "check" ? "check" : "woop");
+showTab(["woop","check","padlet"].indexOf(state.tab) >= 0 ? state.tab : "woop");
 })();
 </script>
 </body>
