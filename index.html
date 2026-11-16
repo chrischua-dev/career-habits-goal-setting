@@ -20,7 +20,7 @@
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--mist);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
 h1,h2,h3,p{margin:0}
-button,input,textarea{font:inherit;color:inherit}
+button,input,textarea,select{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 .wrap{max-width:760px;margin:0 auto;padding:0 20px}
 
@@ -30,7 +30,8 @@ button,input,textarea{font:inherit;color:inherit}
 .mast h1{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,6.4vw,3rem);line-height:1.05;letter-spacing:-.02em;margin:6px 0 20px}
 .who{display:grid;grid-template-columns:1fr 150px;gap:12px;margin-bottom:22px}
 .who label{display:block;font-size:.85rem;color:#B9D3CC;margin-bottom:4px}
-.who input{width:100%;padding:11px 12px;border:1.5px solid #3F7269;border-radius:8px;background:#0C302C;color:#fff}
+.who input,.who select{width:100%;padding:11px 12px;border:1.5px solid #3F7269;border-radius:8px;background:#0C302C;color:#fff;font:inherit;min-height:48px}
+.who select.unset{border-color:var(--sun)}
 .who input::placeholder{color:#7FA59C}
 .tabs{display:flex;gap:4px}
 .tab{flex:1;border:0;cursor:pointer;padding:14px 10px;border-radius:12px 12px 0 0;background:#1C524B;color:#CFE2DC;font-weight:600;font-size:1rem}
@@ -159,7 +160,7 @@ a{color:var(--pine-2);font-weight:600}
     <h1>Career Habits and Goal Setting</h1>
     <div class="who">
       <div><label for="name">Your name</label><input id="name" autocomplete="name" placeholder="e.g. Tan Wei Ling"></div>
-      <div><label for="cls">Class</label><input id="cls" autocomplete="off" placeholder="e.g. PE01"></div>
+      <div><label for="cls">Class</label><select id="cls"><option value="">Select</option></select></div>
     </div>
     <div class="tabs" role="tablist" aria-label="Activities">
       <button class="tab" role="tab" id="tab-woop" aria-controls="view-woop" aria-selected="true">WOOP</button>
@@ -253,10 +254,10 @@ a{color:var(--pine-2);font-weight:600}
 
   <!-- ============ PADLET ============ -->
   <section class="view" id="view-padlet" role="tabpanel" aria-labelledby="tab-padlet" hidden>
-    <h2>Share on the class Padlet</h2>
+    <h2 id="padlet-title">Share on the class Padlet</h2>
     <ol class="steps">
       <li>Copy your answers with one of the buttons below.</li>
-      <li>On the Padlet board, tap the <strong>+</strong> button to start a new post.</li>
+      <li>On your class Padlet board, tap the <strong>+</strong> button to start a new post.</li>
       <li>Type your name and class as the subject.</li>
       <li>Tap in the body of the post and paste (press and hold, then choose Paste, or Ctrl+V on a laptop).</li>
       <li>Tap <strong>Publish</strong>.</li>
@@ -266,10 +267,16 @@ a{color:var(--pine-2);font-weight:600}
       <button class="btn" id="padlet-copy-check">Copy my checklist result</button>
     </div>
     <p class="copied" id="padlet-status" role="status"></p>
-    <div class="board">
-      <iframe id="padlet-frame" title="Class Padlet: CAMA Topic 1.3" allow="camera;microphone;geolocation;display-capture;clipboard-write" loading="lazy"></iframe>
+    <div class="share" id="padlet-pick">
+      <p><strong>Choose your class first.</strong> Each class has its own Padlet board. Pick yours here and the board will load.</p>
+      <div class="row" id="padlet-classes"></div>
     </div>
-    <p style="margin-top:14px">Board not loading, or too small to use on your phone? <a id="padlet-link" href="https://padlet.com/temasek_polytechnic/cama-topic-1-3-s025cv9q4kyzxfhi5tkj" target="_blank" rel="noopener">Open the Padlet in a new tab</a>.</p>
+    <div id="padlet-board" hidden>
+      <div class="board">
+        <iframe id="padlet-frame" title="Class Padlet" allow="camera;microphone;geolocation;display-capture;clipboard-write"></iframe>
+      </div>
+      <p style="margin-top:14px">Board not loading, or too small to use on your phone? <a id="padlet-link" href="#" target="_blank" rel="noopener">Open the Padlet in a new tab</a>.</p>
+    </div>
   </section>
 
   <p class="saved noprint">Your answers are saved on this device only, so you can close the page and come back. <button class="linkbtn" id="clear">Clear my answers</button></p>
@@ -330,7 +337,15 @@ var ITEMS = [
 ];
 
 var KEY = "cama13-career-habits-v1";
-var PADLET_EMBED = "https://padlet.com/embed/s025cv9q4kyzxfhi5tkj";
+var PADLETS = {
+  TE01:"cama-topic-1-3-te01-s025i1ma6jmxucm0ggs8",
+  TE02:"cama-topic-1-3-te02-s025i1mvplx109c1jlbs",
+  TE03:"cama-topic-1-3-te03-s025cv9q4kyzxfhi5tkj",
+  TE04:"cama-topic-1-3-te04-s025i1nj9qsfbqaq7aky",
+  TE05:"cama-topic-1-3-te05-s025i1nlifk9nrtrjyei",
+  TE06:"cama-topic-1-3-te06-s025i1nikk88ymve587s"
+};
+var CLASSES = Object.keys(PADLETS);
 var state = {name:"", cls:"", tab:"woop", stage:"intro", step:0,
   woop:{wish:"", outcome:"", obstacle:"", ifPart:"", thenPart:""},
   checks:ITEMS.map(function(){return false;}), todo:"", shown:false};
@@ -391,11 +406,27 @@ function showTab(tab){
     $("view-"+t).hidden = t !== tab;
   });
   $("bar").hidden = tab !== "check";
-  if(tab === "padlet"){
-    var fr = $("padlet-frame");
-    if(!fr.getAttribute("src")) fr.setAttribute("src", PADLET_EMBED);
-  }
+  renderPadlet();
   save();
+}
+
+/* ---------- class and Padlet ---------- */
+function setClass(c){
+  state.cls = CLASSES.indexOf(c) >= 0 ? c : "";
+  var sel = $("cls"); sel.value = state.cls; sel.className = state.cls ? "" : "unset";
+  save(); refreshBy(); renderPadlet();
+}
+function renderPadlet(){
+  var slug = PADLETS[state.cls], fr = $("padlet-frame");
+  $("padlet-pick").hidden = !!slug;
+  $("padlet-board").hidden = !slug;
+  $("padlet-title").textContent = slug ? "Share on the " + state.cls + " Padlet" : "Share on the class Padlet";
+  if(!slug){ fr.removeAttribute("src"); return; }
+  $("padlet-link").setAttribute("href", "https://padlet.com/temasek_polytechnic/" + slug);
+  fr.setAttribute("title", "Class Padlet for " + state.cls);
+  if(state.tab !== "padlet") return;           /* load the board only when the tab is open */
+  var want = "https://padlet.com/embed/" + slug.slice(slug.lastIndexOf("-") + 1);
+  if(fr.getAttribute("src") !== want) fr.setAttribute("src", want);
 }
 
 /* ---------- WOOP ---------- */
@@ -519,9 +550,19 @@ function checkText(){
 
 /* ---------- wire up ---------- */
 load();
-$("name").value = state.name; $("cls").value = state.cls; $("todo").value = state.todo;
+CLASSES.forEach(function(c){
+  $("cls").appendChild(el("option", {"value":c}, c));
+  var b = el("button", {"class":"btn", "type":"button"}, c);
+  b.addEventListener("click", function(){ setClass(c); });
+  $("padlet-classes").appendChild(b);
+});
+var fromUrl = "";
+try{ fromUrl = (new URLSearchParams(window.location.search).get("class") || "").toUpperCase(); }catch(e){}
+if(CLASSES.indexOf(fromUrl) >= 0) state.cls = fromUrl;
+if(CLASSES.indexOf(state.cls) < 0) state.cls = "";
+$("name").value = state.name; $("cls").value = state.cls; $("cls").className = state.cls ? "" : "unset"; $("todo").value = state.todo;
 $("name").addEventListener("input", function(e){ state.name = e.target.value; save(); refreshBy(); });
-$("cls").addEventListener("input", function(e){ state.cls = e.target.value; save(); refreshBy(); });
+$("cls").addEventListener("change", function(e){ setClass(e.target.value); });
 $("todo").addEventListener("input", function(e){ state.todo = e.target.value; save(); });
 function refreshBy(){ if(state.stage === "summary") $("woop-by").textContent = byline(); $("check-by").textContent = "Completed by " + byline(); }
 
